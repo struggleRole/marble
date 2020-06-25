@@ -17,6 +17,10 @@ public enum CrudEnum {
     TEST_SUCCESS("测试成功"),
     TEST_FAIL("测试失败"),
 
+    TEST_SUCCESS1("测试成功1"),
+    TEST_FAIL1("测试失败1"),
+
+
     ;
 
     String msg;
