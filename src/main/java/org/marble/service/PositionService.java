@@ -30,6 +30,7 @@ public class PositionService {
         BeanUtils.copyProperties(positionForm,position);
         position.setCreatedate(new Date());
         position.setEnabled(true);
+        System.out.println(11);
         return positionMapper.insertSelective(position);
     }
 
