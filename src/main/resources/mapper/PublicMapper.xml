@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.marble.dao.PublicMapper">
+  <resultMap id="BaseResultMap" type="org.marble.pojo.Public">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="publicnum" jdbcType="VARCHAR" property="publicnum" />
+    <result column="publictime" jdbcType="TIMESTAMP" property="publictime" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, publicnum, publictime, name, address
+  </sql>
+  <resultMap id="publicPage" type="org.marble.pojo.Public" extends="BaseResultMap">
+    <association property="nation" javaType="org.marble.pojo.Nation">
+      <id column="nid" property="id"/>
+      <result column="nname" property="name"/>
+    </association>
+  </resultMap>
+  <select id="all" resultType="org.marble.pojo.Public">
+    select <include refid="Base_Column_List"/> from public
+  </select>
+  <select id="allPublicByPage" resultMap="publicPage">
+    SELECT  public.*,nation.`id` AS nid,nation.`name` AS nname
+    FROM public ,nation  WHERE public.`nationid` = nation.`id` limit #{page},#{size}
+  </select>
+  <select id="getTotal" resultType="java.lang.Integer">
+    select count(*) from public
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from public
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectPublicByNum" parameterType="java.lang.String"
+          resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from public
+    where publicnum = #{publicNum,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from public
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.marble.pojo.Public">
+    insert into public (id, publicnum, publictime, 
+      name, address)
+    values (#{id,jdbcType=INTEGER}, #{publicnum,jdbcType=VARCHAR}, #{publictime,jdbcType=TIMESTAMP}, 
+      #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.marble.pojo.Public">
+    insert into public
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="publicnum != null">
+        publicnum,
+      </if>
+      <if test="publictime != null">
+        publictime,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="publicnum != null">
+        #{publicnum,jdbcType=VARCHAR},
+      </if>
+      <if test="publictime != null">
+        #{publictime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.marble.pojo.Public">
+    update public
+    <set>
+      <if test="publicnum != null">
+        publicnum = #{publicnum,jdbcType=VARCHAR},
+      </if>
+      <if test="publictime != null">
+        publictime = #{publictime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.marble.pojo.Public">
+    update public
+    set publicnum = #{publicnum,jdbcType=VARCHAR},
+      publictime = #{publictime,jdbcType=TIMESTAMP},
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
